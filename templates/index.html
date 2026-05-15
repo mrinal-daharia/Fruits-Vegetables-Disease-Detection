@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Fruits & Vegetables Disease Detection</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(135deg,
+                    #0f2027,
+                    #203a43,
+                    #2c5364);
+
+            background-attachment: fixed;
+
+            overflow: hidden;
+        }
+
+        body::-webkit-scrollbar {
+
+            width: 0;
+
+            height: 0;
+
+            display: none;
+        }
+
+        .bg1 {
+
+            position: fixed;
+
+            width: 400px;
+
+            height: 400px;
+
+            background: #4caf50;
+
+            border-radius: 50%;
+
+            filter: blur(120px);
+
+            top: -100px;
+
+            left: -100px;
+
+            opacity: 0.25;
+
+            z-index: 1;
+        }
+
+        .bg2 {
+
+            position: fixed;
+
+            width: 350px;
+
+            height: 350px;
+
+            background: #ff9800;
+
+            border-radius: 50%;
+
+            filter: blur(120px);
+
+            bottom: -100px;
+
+            right: -100px;
+
+            opacity: 0.25;
+
+            z-index: 1;
+        }
+
+        .container {
+
+            position: relative;
+
+            width: 520px;
+
+            max-width: 92%;
+
+            padding: 45px;
+
+            border-radius: 28px;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            border: 1px solid rgba(255, 255, 255, 0.18);
+
+            backdrop-filter: blur(22px);
+
+            box-shadow:
+                0 8px 40px rgba(0, 0, 0, 0.35);
+
+            text-align: center;
+
+            color: white;
+
+            z-index: 10;
+
+            margin: 20px;
+
+            overflow-y: auto;
+
+            max-height: 95vh;
+
+            scrollbar-width: none;
+
+            -ms-overflow-style: none;
+        }
+
+        .container::-webkit-scrollbar {
+
+            display: none;
+        }
+
+        .heading {
+
+            font-size: 35px;
+
+            line-height: 1.3;
+
+            margin-bottom: 14px;
+
+            font-weight: bold;
+        }
+
+        p {
+
+            color: rgba(255, 255, 255, 0.72);
+
+            margin-bottom: 35px;
+
+            font-size: 17px;
+        }
+
+        .upload-box {
+
+            display: block;
+
+            position: relative;
+
+            width: 100%;
+
+            min-height: 320px;
+
+            padding: 25px;
+
+            border: 2px dashed rgba(255, 255, 255, 0.35);
+
+            border-radius: 22px;
+
+            background: rgba(255, 255, 255, 0.05);
+
+            transition: 0.35s;
+
+            cursor: pointer;
+
+            overflow: hidden;
+        }
+
+        .upload-box:hover {
+
+            background: rgba(255, 255, 255, 0.09);
+
+            border-color: #4caf50;
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 30px rgba(76, 175, 80, 0.15);
+        }
+
+        .upload-icon {
+
+            font-size: 55px;
+
+            margin-bottom: 15px;
+        }
+
+        .upload-box h2 {
+
+            font-size: 30px;
+
+            margin-bottom: 12px;
+
+            font-weight: bold;
+        }
+
+        .upload-box span {
+
+            color: rgba(255, 255, 255, 0.65);
+
+            font-size: 17px;
+        }
+
+        .upload-content {
+
+            position: absolute;
+
+            inset: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            z-index: 2;
+        }
+
+        #preview-image {
+
+            width: 100%;
+
+            max-height: 400px;
+
+            object-fit: contain;
+
+            border-radius: 18px;
+
+            display: none;
+        }
+
+        .upload-box input[type="file"] {
+
+            position: absolute;
+
+            inset: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            opacity: 0;
+
+            cursor: pointer;
+
+            z-index: 5;
+        }
+
+        button {
+
+            margin-top: 30px;
+
+            width: 100%;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(135deg,
+                    #4caf50,
+                    #ff9800);
+
+            color: white;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 5px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        button:hover {
+
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 10px 30px rgba(255, 152, 0, 0.5);
+        }
+
+        @media(max-width: 600px) {
+
+            .container {
+
+                width: 92%;
+
+                padding: 35px 22px;
+            }
+
+            .heading {
+
+                font-size: 28px;
+            }
+
+            .upload-box h2 {
+
+                font-size: 24px;
+            }
+
+            p {
+
+                font-size: 15px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="bg1"></div>
+
+    <div class="bg2"></div>
+
+    <div class="container">
+
+        <h1 class="heading">
+            Fruits & Vegetables Disease Detection 🥕🍎
+        </h1>
+
+        <p>
+            Upload a fruit or vegetable image and let AI detect diseases instantly
+        </p>
+
+        <form action="/predict" method="POST" enctype="multipart/form-data">
+
+            <label class="upload-box">
+
+                <img id="preview-image" src="" alt="Preview">
+
+                <div class="upload-content" id="upload-content">
+
+                    <div class="upload-icon">
+                        🥦🍅🍊
+                    </div>
+
+                    <h2>
+                        Upload Image
+                    </h2>
+
+                    <span>
+                        Drag & Drop or Click to Browse
+                    </span>
+
+                </div>
+
+                <input type="file" name="image" id="file-input" required>
+
+            </label>
+
+            <button type="submit">
+                Detect Disease
+            </button>
+
+        </form>
+
+    </div>
+
+    <script>
+
+        const fileInput = document.getElementById('file-input');
+
+        const previewImage = document.getElementById('preview-image');
+
+        const uploadContent = document.getElementById('upload-content');
+
+        fileInput.addEventListener('change', function () {
+
+            const file = this.files[0];
+
+            if (file) {
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+
+                    previewImage.src = e.target.result;
+
+                    previewImage.style.display = 'block';
+
+                    uploadContent.style.display = 'none';
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
